@@ -73,6 +73,16 @@
     input.css('width', minWidth);
   };
 
+  $.fn.tagCount = function(value, options) {
+    var id = $(this).attr('id');
+    var tagslist = $(this).val().split(delimiter[id]);
+    if (tagslist[0] == '') {
+      tagslist = new Array();
+    }
+
+    return tagslist.length;
+  }
+
 	$.fn.addTag = function(value,options) {
 			options = jQuery.extend({focus:false,callback:true},options);
 			this.each(function() {
@@ -85,8 +95,8 @@
 
 				value = jQuery.trim(value);
 
-				if (options.unique) {
-					var skipTag = $(this).tagExist(value);
+				if (options.unique || tagslist.length+1 > options.maxTags) {
+					var skipTag = $(this).tagExist(value) || tagslist.length+1 > options.maxTags;
 					if(skipTag == true) {
 					    //Marks fake input as not_valid to let styling it
     				    $('#'+id+'_tag').addClass('not_valid');
